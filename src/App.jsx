@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 
 import './App.css'
@@ -8,25 +8,49 @@ const aritcleTitle = [
 
 function App() {
 
-  const [title, setTitle] = useState(aritcleTitle)
-  const [newTitle, setNewTitle] = useState()
+  const [article, setArticle] = useState(aritcleTitle)
+  const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
+  const [img, setImg] = useState('')
+  const [html, setHtml] = useState('')
+  const [js, setJs] = useState('')
+  const [published, setPublished] = useState('')
+  const [search, setSearch] = useState('')
+  const [filteredArticle, setFilteredArticle] = useState([])
   // const [newBody, setNewBody] = useState('')
+  useEffect(() => {
 
 
-  function getTitle(e) {
+
+    const filteredArticle = article.filter((article) => article.title.includes(search))
+    console.log(filteredArticle);
+
+
+
+    setFilteredArticle(filteredArticle)
+
+
+
+  }, [title, search])
+
+
+  function getArticle(e) {
     e.preventDefault()
 
     console.log(title);
 
 
-    setTitle(
+    setArticle(
 
       [
-        ...title,
+        ...article,
         {
-          title: newTitle,
-          body: body
+          title: title,
+          body: body,
+          img: img,
+          html: html,
+          js: js,
+          published: published
         }
 
       ]
@@ -45,10 +69,10 @@ function App() {
     const articleIndex = Number(e.target.getAttribute('data-index'))
     console.log(articleIndex);
 
-    const removeArticle = title.filter((title, index) => index !== articleIndex)
+    const removeArticle = filteredArticle.filter((title, index) => index !== articleIndex)
 
 
-    setTitle(removeArticle)
+    setArticle(removeArticle)
 
 
   }
@@ -56,21 +80,71 @@ function App() {
   return (
     <>
       <div className="container">
+        <header className="header d-flex justify-content-between align-items-center">
+          <div>
+            <h1>Blog App</h1>
+            <p>Un semplice blog creato con React</p>
 
-        <form onSubmit={getTitle} className='mb-3'>
+          </div>
+
+          <div className="mb-3 d-flex justify-content-end">
+
+            <input
+              type="search"
+              className="form-control"
+              id='search'
+              placeholder="Search.."
+              aria-label="Username"
+              aria-describedby="basic-addon1"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+
+            />
+          </div>
+
+          <hr />
+        </header>
+
+        <form onSubmit={getArticle} className='mb-3'>
           <div className="mb-3">
             <label htmlFor="title" className="form-label">Titolo Articolo</label>
-            <input type="text" className="form-control" id="title" placeholder="Titolo Articolo" onChange={e => setNewTitle(e.target.value)} />
+            <input type="text" className="form-control" id="title" placeholder="Titolo Articolo" onChange={e => setTitle(e.target.value)} />
           </div>
           <div className="mb-3">
             <label htmlFor="body" className="form-label">Corpo Articolo</label>
             <textarea className="form-control" id="body" rows="3" onChange={e => setBody(e.target.value)} />
           </div>
+          <div className="mb-3">
+            <label htmlFor="image" className="form-label">Image</label>
+            <textarea className="form-control" id="image" rows="1" onChange={e => setImg(e.target.value)} />
+          </div>
+          <div className="form-check">
+            <input className="form-check-input" type="checkbox" value="html" id="html" onChange={e => setHtml(e.target.value)} />
+            <label className="form-check-label" htmlFor="html">
+              Html
+            </label>
+          </div>
+          <div className="form-check">
+            <input className="form-check-input" type="checkbox" value="js" id="js" onChange={e => setJs(e.target.value)} />
+            <label className="form-check-label" htmlFor="js">
+              js
+            </label>
+          </div>
+
+          <div className="form-check">
+            <input className="form-check-input" type="checkbox" value="published" id="published" onChange={e => setPublished(e.target.value)} />
+            <label className="form-check-label" htmlFor="published">
+              published
+            </label>
+          </div>
+
           <button type='submit' className="btn btn-primary">Post</button>
         </form>
 
         <div className='article'>
-          {title.map((articleTitle, index) => <div key={index} ><h2>Titolo: {articleTitle.title}</h2><p>Contentuto: {articleTitle.body}</p>
+          {filteredArticle.map((article, index) => <div key={index} ><h2>Titolo: {article.title}</h2><p>Contentuto: {article.body}</p>
+            <p>Tags: {article.html} , {article.js}</p>
+            <img src={article.img} />
             <button type="submit" className="btn btn-primary" data-index={index} onClick={handleTrashTaskClick}>
               Remove task
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
