@@ -22,23 +22,20 @@ function App() {
 
 
 
-    const filteredArticle = article.filter((article) => article.title.includes(search))
-    console.log(filteredArticle);
+    const searchArticle = article.filter((article) => article.title.includes(search))
 
 
 
-    setFilteredArticle(filteredArticle)
+
+    setFilteredArticle(searchArticle)
 
 
 
-  }, [title, search])
+  }, [article, search])
 
 
   function getArticle(e) {
     e.preventDefault()
-
-    console.log(title);
-
 
     setArticle(
 
@@ -56,10 +53,6 @@ function App() {
       ]
     )
 
-
-
-
-    console.log(title);
     e.target.reset()
   }
 
@@ -67,7 +60,7 @@ function App() {
   function handleTrashTaskClick(e) {
     e.preventDefault()
     const articleIndex = Number(e.target.getAttribute('data-index'))
-    console.log(articleIndex);
+
 
     const removeArticle = filteredArticle.filter((title, index) => index !== articleIndex)
 
@@ -108,15 +101,15 @@ function App() {
         <form onSubmit={getArticle} className='mb-3'>
           <div className="mb-3">
             <label htmlFor="title" className="form-label">Titolo Articolo</label>
-            <input type="text" className="form-control" id="title" placeholder="Titolo Articolo" onChange={e => setTitle(e.target.value)} />
+            <input type="text" className="form-control" id="title" placeholder="Titolo Articolo" value={title} onChange={e => setTitle(e.target.value)} />
           </div>
           <div className="mb-3">
             <label htmlFor="body" className="form-label">Corpo Articolo</label>
-            <textarea className="form-control" id="body" rows="3" onChange={e => setBody(e.target.value)} />
+            <textarea className="form-control" id="body" rows="3" value={body} onChange={e => setBody(e.target.value)} />
           </div>
           <div className="mb-3">
             <label htmlFor="image" className="form-label">Image</label>
-            <textarea className="form-control" id="image" rows="1" onChange={e => setImg(e.target.value)} />
+            <textarea className="form-control" id="image" rows="1" value={img} onChange={e => setImg(e.target.value)} />
           </div>
           <div className="form-check">
             <input className="form-check-input" type="checkbox" value="html" id="html" onChange={e => setHtml(e.target.value)} />
@@ -153,8 +146,6 @@ function App() {
               </svg>
             </button>
           </div>)}
-
-
 
         </div>
       </div>
